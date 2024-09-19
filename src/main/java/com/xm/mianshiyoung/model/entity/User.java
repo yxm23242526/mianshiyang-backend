@@ -73,6 +73,12 @@ public class User implements Serializable {
      */
     private Date updateTime;
 
+
+    /**
+     * 修改时间
+     */
+    private Date editTime;
+
     /**
      * 是否删除
      */
