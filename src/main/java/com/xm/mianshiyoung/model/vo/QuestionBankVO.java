@@ -12,8 +12,6 @@ import java.util.Date;
 /**
  * 题库视图
  *
- *
- * @from <a href="https://www.code-nav.cn">编程导航学习圈</a>
  */
 @Data
 public class QuestionBankVO implements Serializable {
@@ -62,7 +60,7 @@ public class QuestionBankVO implements Serializable {
     /**
      * 题库里的题目列表分页
      */
-    Page<Question> questionPage;
+    Page<QuestionVO> questionPage;
 
 
     /**

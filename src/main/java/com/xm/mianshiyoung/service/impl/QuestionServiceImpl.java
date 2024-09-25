@@ -5,12 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xm.mianshiyoung.annotation.AuthCheck;
-import com.xm.mianshiyoung.common.BaseResponse;
 import com.xm.mianshiyoung.common.ErrorCode;
-import com.xm.mianshiyoung.common.ResultUtils;
 import com.xm.mianshiyoung.constant.CommonConstant;
-import com.xm.mianshiyoung.constant.UserConstant;
 import com.xm.mianshiyoung.exception.ThrowUtils;
 import com.xm.mianshiyoung.mapper.QuestionMapper;
 import com.xm.mianshiyoung.model.dto.question.QuestionQueryRequest;
@@ -40,8 +36,6 @@ import java.util.stream.Collectors;
 /**
  * 题目服务实现
  *
- *
- * @from <a href="https://www.code-nav.cn">编程导航学习圈</a>
  */
 @Service
 @Slf4j
@@ -215,6 +209,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             if (CollUtil.isNotEmpty(list)){
                 Set<Long> questionIdList = list.stream().map(QuestionBankQuestion::getQuestionId).collect(Collectors.toSet());
                 queryWrapper.in("id", questionIdList);
+            } else{
+                return new Page<>(current, size, 0);
             }
         }
         // 查询数据库

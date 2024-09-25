@@ -10,8 +10,6 @@ import java.util.Date;
 /**
  * 题库题目关联视图
  *
- *
- * @from <a href="https://www.code-nav.cn">编程导航学习圈</a>
  */
 @Data
 public class QuestionBankQuestionVO implements Serializable {
