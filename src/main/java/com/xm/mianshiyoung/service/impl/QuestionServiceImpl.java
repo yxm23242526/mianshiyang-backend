@@ -194,13 +194,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
 
     /**
-     * 分页获取题目列表（仅管理员可用）
      *
      * @param questionQueryRequest
      * @return
      */
     @PostMapping("/list/page")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public Page<Question> listQuestionByPage(@RequestBody QuestionQueryRequest questionQueryRequest) {
         long current = questionQueryRequest.getCurrent();
         long size = questionQueryRequest.getPageSize();
