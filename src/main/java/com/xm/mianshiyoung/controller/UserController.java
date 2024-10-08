@@ -21,7 +21,9 @@ import com.xm.mianshiyoung.model.vo.LoginUserVO;
 import com.xm.mianshiyoung.model.vo.UserVO;
 import com.xm.mianshiyoung.service.UserService;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -315,4 +317,34 @@ public class UserController {
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(true);
     }
+
+
+    /**
+     * 添加用户签到记录
+     *
+     * @return 当前是否已经签到
+     */
+    @PostMapping("/add/signin")
+    public BaseResponse<Boolean> addUserSignIn(HttpServletRequest request){
+        User loginUser = userService.getLoginUser(request);
+        boolean result = userService.addUserSignIn(loginUser.getId());
+        return ResultUtils.success(result);
+    }
+
+
+    /**
+     * 获取用户某个年份的签到记录
+     *
+     * @param request
+     * @param year   年份（为空表示当前年份）
+     * @return 签到记录映射
+     */
+    @GetMapping("/get/signin")
+    BaseResponse<List<Integer>> getUserSignInRecord(HttpServletRequest request, Integer year){
+        User loginUser = userService.getLoginUser(request);
+        Long userId = loginUser.getId();
+        List<Integer> userSignInRecord = userService.getUserSignInRecord(userId, year);
+        return ResultUtils.success(userSignInRecord);
+    };
+
 }
