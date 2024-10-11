@@ -11,10 +11,7 @@ import com.xm.mianshiyoung.common.ResultUtils;
 import com.xm.mianshiyoung.constant.UserConstant;
 import com.xm.mianshiyoung.exception.BusinessException;
 import com.xm.mianshiyoung.exception.ThrowUtils;
-import com.xm.mianshiyoung.model.dto.questionBankQuestion.QuestionBankQuestionAddRequest;
-import com.xm.mianshiyoung.model.dto.questionBankQuestion.QuestionBankQuestionQueryRequest;
-import com.xm.mianshiyoung.model.dto.questionBankQuestion.QuestionBankQuestionRemoveRequest;
-import com.xm.mianshiyoung.model.dto.questionBankQuestion.QuestionBankQuestionUpdateRequest;
+import com.xm.mianshiyoung.model.dto.questionBankQuestion.*;
 import com.xm.mianshiyoung.model.entity.QuestionBankQuestion;
 import com.xm.mianshiyoung.model.entity.User;
 import com.xm.mianshiyoung.model.vo.QuestionBankQuestionVO;
@@ -26,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 题库题目关联接口
@@ -224,5 +222,49 @@ public class QuestionBankQuestionController {
     }
 
 
+    /**
+     * 批量添加题目到题库
+     *
+     * @param questionBankQuestionBatchAddRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/add/batch")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<Boolean> batchAddQuestionsToBank(
+            @RequestBody QuestionBankQuestionBatchAddRequest questionBankQuestionBatchAddRequest,
+            HttpServletRequest request
+    ) {
+        // 参数校验
+        ThrowUtils.throwIf(questionBankQuestionBatchAddRequest == null, ErrorCode.PARAMS_ERROR);
+        User loginUser = userService.getLoginUser(request);
+        Long questionBankId = questionBankQuestionBatchAddRequest.getQuestionBankId();
+        List<Long> questionIdList = questionBankQuestionBatchAddRequest.getQuestionIdList();
+        questionBankQuestionService.batchAddQuestionsToBank(questionIdList, questionBankId, loginUser);
+        return ResultUtils.success(true);
+    }
+
+
+
+    /**
+     * 批量从题库删除题目
+     *
+     * @param questionBankQuestionBatchAddRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/remove/batch")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<Boolean> batchRemoveQuestionsFromBank(
+            @RequestBody QuestionBankQuestionBatchAddRequest questionBankQuestionBatchAddRequest,
+            HttpServletRequest request
+    ) {
+        // 参数校验
+        ThrowUtils.throwIf(questionBankQuestionBatchAddRequest == null, ErrorCode.PARAMS_ERROR);
+        Long questionBankId = questionBankQuestionBatchAddRequest.getQuestionBankId();
+        List<Long> questionIdList = questionBankQuestionBatchAddRequest.getQuestionIdList();
+        questionBankQuestionService.batchRemoveQuestionsFromBank(questionIdList, questionBankId);
+        return ResultUtils.success(true);
+    }
     // endregion
 }

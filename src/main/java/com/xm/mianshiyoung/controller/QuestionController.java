@@ -10,10 +10,7 @@
  import com.xm.mianshiyoung.constant.UserConstant;
  import com.xm.mianshiyoung.exception.BusinessException;
  import com.xm.mianshiyoung.exception.ThrowUtils;
- import com.xm.mianshiyoung.model.dto.question.QuestionAddRequest;
- import com.xm.mianshiyoung.model.dto.question.QuestionEditRequest;
- import com.xm.mianshiyoung.model.dto.question.QuestionQueryRequest;
- import com.xm.mianshiyoung.model.dto.question.QuestionUpdateRequest;
+ import com.xm.mianshiyoung.model.dto.question.*;
  import com.xm.mianshiyoung.model.entity.Question;
  import com.xm.mianshiyoung.model.entity.User;
  import com.xm.mianshiyoung.model.vo.QuestionVO;
@@ -243,6 +240,14 @@ public class QuestionController {
         return ResultUtils.success(true);
     }
 
+
+     /**
+      * 通过ES查询
+      *
+      * @param questionQueryRequest
+      * @param request
+      * @return
+      */
      @PostMapping("/search/page/vo")
      public BaseResponse<Page<QuestionVO>> searchQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
                                                                   HttpServletRequest request) {
@@ -253,5 +258,18 @@ public class QuestionController {
          return ResultUtils.success(questionService.getQuestionVOPage(questionPage, request));
      }
 
+
+     /**
+      * 批量删除题目
+      * @param questionBatchDeleteRequest
+      * @return
+      */
+     @PostMapping("/delete/batch")
+     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+     public BaseResponse<Boolean> batchDeleteQuestions(@RequestBody QuestionBatchDeleteRequest questionBatchDeleteRequest){
+         ThrowUtils.throwIf(questionBatchDeleteRequest == null, ErrorCode.PARAMS_ERROR);
+         questionService.batchDeleteQuestions(questionBatchDeleteRequest.getQuestionIdList());
+         return ResultUtils.success(true);
+     }
     // endregion
 }
