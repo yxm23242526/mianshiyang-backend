@@ -3,6 +3,7 @@ package com.xm.mianshiyoung.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xm.mianshiyoung.common.BatchAddResult;
 import com.xm.mianshiyoung.model.dto.questionBankQuestion.QuestionBankQuestionQueryRequest;
 import com.xm.mianshiyoung.model.entity.QuestionBankQuestion;
 import com.xm.mianshiyoung.model.entity.User;
@@ -61,7 +62,7 @@ public interface QuestionBankQuestionService extends IService<QuestionBankQuesti
      * @param questionBankId
      * @param loginUser
      */
-    void batchAddQuestionsToBank(List<Long> questionIds, Long questionBankId, User loginUser);
+    BatchAddResult batchAddQuestionsToBank(List<Long> questionIds, Long questionBankId, User loginUser);
 
 
     @Transactional(rollbackFor = Exception.class)

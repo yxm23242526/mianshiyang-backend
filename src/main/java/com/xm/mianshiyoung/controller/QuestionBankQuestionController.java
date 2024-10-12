@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xm.mianshiyoung.annotation.AuthCheck;
-import com.xm.mianshiyoung.common.BaseResponse;
-import com.xm.mianshiyoung.common.DeleteRequest;
-import com.xm.mianshiyoung.common.ErrorCode;
-import com.xm.mianshiyoung.common.ResultUtils;
+import com.xm.mianshiyoung.common.*;
 import com.xm.mianshiyoung.constant.UserConstant;
 import com.xm.mianshiyoung.exception.BusinessException;
 import com.xm.mianshiyoung.exception.ThrowUtils;
@@ -240,7 +237,8 @@ public class QuestionBankQuestionController {
         User loginUser = userService.getLoginUser(request);
         Long questionBankId = questionBankQuestionBatchAddRequest.getQuestionBankId();
         List<Long> questionIdList = questionBankQuestionBatchAddRequest.getQuestionIdList();
-        questionBankQuestionService.batchAddQuestionsToBank(questionIdList, questionBankId, loginUser);
+        //TODO 这里没有使用返回值
+        BatchAddResult batchAddResult = questionBankQuestionService.batchAddQuestionsToBank(questionIdList, questionBankId, loginUser);
         return ResultUtils.success(true);
     }
 
