@@ -121,6 +121,23 @@
             <version>3.21.0</version>
         </dependency>
 
+        <!--hotkey  -->
+        <dependency>
+            <artifactId>hotkey-client</artifactId>
+            <groupId>com.jd.platform.hotkey</groupId>
+            <version>0.0.4-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/hotkey-client-0.0.4-SNAPSHOT.jar</systemPath>
+        </dependency>
+
+
+        <!--sentinel-->
+        <!-- https://mvnrepository.com/artifact/com.alibaba.cloud/spring-cloud-starter-alibaba-sentinel -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+            <version>2021.0.5.0</version>
+        </dependency>
 
 
         <dependency>
