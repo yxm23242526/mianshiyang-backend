@@ -1,5 +1,6 @@
  package com.xm.mianshiyoung.controller;
 
+ import cn.dev33.satoken.annotation.SaCheckRole;
  import cn.hutool.json.JSONUtil;
  import com.alibaba.csp.sentinel.Entry;
  import com.alibaba.csp.sentinel.EntryType;
@@ -22,6 +23,7 @@
  import com.xm.mianshiyoung.model.vo.QuestionVO;
  import com.xm.mianshiyoung.service.QuestionService;
  import com.xm.mianshiyoung.service.UserService;
+ import com.xm.mianshiyoung.utils.CrawlerUtils;
  import lombok.extern.slf4j.Slf4j;
  import org.springframework.beans.BeanUtils;
  import org.springframework.web.bind.annotation.*;
@@ -45,6 +47,8 @@ public class QuestionController {
     @Resource
     private UserService userService;
 
+    @Resource
+    private CrawlerUtils crawlerUtils;
     // region 增删改查
 
     /**
@@ -55,7 +59,7 @@ public class QuestionController {
      * @return
      */
     @PostMapping("/add")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Long> addQuestion(@RequestBody QuestionAddRequest questionAddRequest, HttpServletRequest request) {
         ThrowUtils.throwIf(questionAddRequest == null, ErrorCode.PARAMS_ERROR);
         Question question = new Question();
@@ -85,7 +89,7 @@ public class QuestionController {
      * @return
      */
     @PostMapping("/delete")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> deleteQuestion(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -112,7 +116,7 @@ public class QuestionController {
      * @return
      */
     @PostMapping("/update")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> updateQuestion(@RequestBody QuestionUpdateRequest questionUpdateRequest) {
         if (questionUpdateRequest == null || questionUpdateRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -144,6 +148,11 @@ public class QuestionController {
     @GetMapping("/get/vo")
     public BaseResponse<QuestionVO> getQuestionVOById(long id, HttpServletRequest request) {
         ThrowUtils.throwIf(id <= 0, ErrorCode.PARAMS_ERROR);
+
+
+        User loginUser = userService.getLoginUser(request);
+        crawlerUtils.crawlerDetect(loginUser.getId());
+
         // 查询数据库
         Question question = questionService.getById(id);
         ThrowUtils.throwIf(question == null, ErrorCode.NOT_FOUND_ERROR);
@@ -158,7 +167,7 @@ public class QuestionController {
       * @return
       */
      @PostMapping("/list/page")
-     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+     @SaCheckRole(UserConstant.ADMIN_ROLE)
      public BaseResponse<Page<Question>> listQuestionByPage(@RequestBody QuestionQueryRequest questionQueryRequest) {
          ThrowUtils.throwIf(questionQueryRequest == null, ErrorCode.PARAMS_ERROR);
          Page<Question> questionPage = questionService.listQuestionByPage(questionQueryRequest);
@@ -327,7 +336,7 @@ public class QuestionController {
       * @return
       */
      @PostMapping("/delete/batch")
-     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+     @SaCheckRole(UserConstant.ADMIN_ROLE)
      public BaseResponse<Boolean> batchDeleteQuestions(@RequestBody QuestionBatchDeleteRequest questionBatchDeleteRequest){
          ThrowUtils.throwIf(questionBatchDeleteRequest == null, ErrorCode.PARAMS_ERROR);
          questionService.batchDeleteQuestions(questionBatchDeleteRequest.getQuestionIdList());
